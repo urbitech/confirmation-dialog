@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ConfirmationDialogExtension.php
  *
@@ -12,7 +13,7 @@
  * @date           08.06.14
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace IPub\ConfirmationDialog\DI;
 
@@ -44,7 +45,7 @@ final class ConfirmationDialogExtension extends DI\CompilerExtension
 	/**
 	 * @return void
 	 */
-	public function loadConfiguration() : void
+	public function loadConfiguration(): void
 	{
 		$config = $this->getConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
@@ -53,29 +54,27 @@ final class ConfirmationDialogExtension extends DI\CompilerExtension
 		$builder->addDefinition($this->prefix('storage'))
 			->setType(Storage\Session::class);
 
-		$confirmerFactory = $builder->addDefinition($this->prefix('confirmer'))
-			->setType(Components\Confirmer::class)
+		$confirmerFactory = $builder->addFactoryDefinition($this->prefix('confirmer'))
 			->setImplement(Components\IConfirmer::class)
 			->setArguments([new Code\PhpLiteral('$templateFile')])
 			->setAutowired(FALSE)
-			->setInject(TRUE);
+			->addTag(Nette\DI\Extensions\InjectExtension::TAG_INJECT);
 
 		// Define components factories
-		$dialogFactory = $builder->addDefinition($this->prefix('dialog'))
-			->setType(Components\Control::class)
+		$dialogFactory = $builder->addFactoryDefinition($this->prefix('dialog'))
 			->setImplement(Components\IControl::class)
 			->setArguments([
 				new Code\PhpLiteral('$layoutFile'),
 				new Code\PhpLiteral('$templateFile'),
 				$confirmerFactory,
 			])
-			->setInject(TRUE);
+			->addTag(Nette\DI\Extensions\InjectExtension::TAG_INJECT);
 
-		if ($config['layoutFile']) {
+		if (isset($config['layoutFile'])) {
 			$dialogFactory->addSetup('$service->setLayoutFile(?)', [$config['layoutFile']]);
 		}
 
-		if ($config['templateFile']) {
+		if (isset($config['templateFile'])) {
 			$dialogFactory->addSetup('$service->setTemplateFile(?)', [$config['templateFile']]);
 		}
 	}
@@ -84,9 +83,9 @@ final class ConfirmationDialogExtension extends DI\CompilerExtension
 	 * @param Nette\Configurator $config
 	 * @param string $extensionName
 	 */
-	public static function register(Nette\Configurator $config, $extensionName = 'confirmationDialog') : void
+	public static function register(Nette\Configurator $config, $extensionName = 'confirmationDialog'): void
 	{
-		$config->onCompile[] = function (Nette\Configurator $config, DI\Compiler $compiler) use ($extensionName) : void {
+		$config->onCompile[] = function (Nette\Configurator $config, DI\Compiler $compiler) use ($extensionName): void {
 			$compiler->addExtension($extensionName, new ConfirmationDialogExtension());
 		};
 	}
@@ -96,7 +95,7 @@ final class ConfirmationDialogExtension extends DI\CompilerExtension
 	 *
 	 * @return string[]
 	 */
-	public function getTranslationResources() : array
+	public function getTranslationResources(): array
 	{
 		return [
 			__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Translations'

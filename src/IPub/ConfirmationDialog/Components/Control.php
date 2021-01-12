@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Control.php
  *
@@ -12,7 +13,7 @@
  * @date           12.03.14
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace IPub\ConfirmationDialog\Components;
 
@@ -59,9 +60,7 @@ final class Control extends BaseControl
 		string $templateFile = NULL,
 		IConfirmer $confirmerFactory
 	) {
-		list(, , , $parent, $name) = func_get_args() + [NULL, NULL, NULL, NULL, NULL];
-
-		parent::__construct($parent, $name);
+		list(,,, $parent, $name) = func_get_args() + [NULL, NULL, NULL, NULL, NULL];
 
 		if ($layoutFile !== NULL) {
 			$this->setLayoutFile($layoutFile);
@@ -84,7 +83,7 @@ final class Control extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function setLayoutFile(string $layoutFile) : void
+	public function setLayoutFile(string $layoutFile): void
 	{
 		$this->setTemplateFilePath($layoutFile, self::TEMPLATE_LAYOUT);
 	}
@@ -98,7 +97,7 @@ final class Control extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function setTemplateFile(string $layoutFile) : void
+	public function setTemplateFile(string $layoutFile): void
 	{
 		$this->setTemplateFilePath($layoutFile, self::TEMPLATE_CONFIRMER);
 	}
@@ -106,7 +105,7 @@ final class Control extends BaseControl
 	/**
 	 * @return string
 	 */
-	public function getTemplateFile() : string
+	public function getTemplateFile(): string
 	{
 		// ...try to get default component layout file
 		return $this->templateFile !== NULL ? $this->templateFile : __DIR__ . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . 'default.latte';
@@ -120,7 +119,7 @@ final class Control extends BaseControl
 	 *
 	 * @return string
 	 */
-	public static function formatSignalMethod($signal) : string
+	public static function formatSignalMethod($signal): string
 	{
 		if (Utils\Strings::startsWith($signal, 'confirm')) {
 			return 'handleShowConfirmer';
@@ -141,7 +140,7 @@ final class Control extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function addConfirmer(string $name, $handler, $question, $heading) : void
+	public function addConfirmer(string $name, $handler, $question, $heading): void
 	{
 		// Confirmer name could be only A-z
 		if (!preg_match('/[A-Za-z_]+/', $name)) {
@@ -170,7 +169,7 @@ final class Control extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function getConfirmer(string $name) : Confirmer
+	public function getConfirmer(string $name): Confirmer
 	{
 		$confirmer = $this->getConfirmerControl($name);
 
@@ -185,7 +184,7 @@ final class Control extends BaseControl
 	/**
 	 * @return void
 	 */
-	public function resetConfirmer() : void
+	public function resetConfirmer(): void
 	{
 		$this->confirmer = NULL;
 
@@ -196,9 +195,9 @@ final class Control extends BaseControl
 	/**
 	 * @return Application\UI\Multiplier
 	 */
-	protected function createComponentConfirmer() : Application\UI\Multiplier
+	protected function createComponentConfirmer(): Application\UI\Multiplier
 	{
-		return new Application\UI\Multiplier((function () : Confirmer {
+		return new Application\UI\Multiplier((function (): Confirmer {
 			// Check if confirmer factory is available
 			if (!$this->confirmerFactory) {
 				throw new Exceptions\InvalidStateException('Confirmation control factory does not exist.');
@@ -208,7 +207,6 @@ final class Control extends BaseControl
 
 			if ($this->useAjax) {
 				$confirmer->enableAjax();
-
 			} else {
 				$confirmer->disableAjax();
 			}
@@ -228,7 +226,7 @@ final class Control extends BaseControl
 	 * @throws Exceptions\InvalidArgumentException
 	 * @throws Exceptions\InvalidStateException
 	 */
-	public function showConfirm(string $name, array $params = []) : void
+	public function showConfirm(string $name, array $params = []): void
 	{
 		if (!is_string($name)) {
 			throw new Exceptions\InvalidArgumentException('$name must be string.');
@@ -250,7 +248,7 @@ final class Control extends BaseControl
 	 * @throws Exceptions\InvalidArgumentException
 	 * @throws Exceptions\InvalidStateException
 	 */
-	public function handleShowConfirmer() : void
+	public function handleShowConfirmer(): void
 	{
 		if (!$this->getPresenter() instanceof Application\UI\Presenter) {
 			throw new Exceptions\InvalidArgumentException('Confirmer is not attached to presenter.');
@@ -259,7 +257,9 @@ final class Control extends BaseControl
 		list(, $signal) = $this->getPresenter()->getSignal();
 
 		$name = Utils\Strings::substring($signal, 7);
-		$name{0} = strtolower($name{0});
+		$name{
+		0} = strtolower($name{
+		0});
 
 		if (!$this['confirmer-' . $name]->isConfigured()) {
 			throw new Exceptions\InvalidArgumentException('Invalid confirmation control.');
@@ -273,7 +273,7 @@ final class Control extends BaseControl
 	/**
 	 * @return void
 	 */
-	public function enableAjax() : void
+	public function enableAjax(): void
 	{
 		$this->useAjax = TRUE;
 	}
@@ -281,7 +281,7 @@ final class Control extends BaseControl
 	/**
 	 * @return void
 	 */
-	public function disableAjax() : void
+	public function disableAjax(): void
 	{
 		$this->useAjax = FALSE;
 	}
@@ -293,7 +293,7 @@ final class Control extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidStateException
 	 */
-	public function render() : void
+	public function render(): void
 	{
 		// Create template
 		$template = parent::render();
@@ -312,7 +312,6 @@ final class Control extends BaseControl
 
 			// Render component template
 			$template->render();
-
 		} else {
 			throw new Exceptions\InvalidStateException('Dialog control is without template.');
 		}
@@ -325,7 +324,7 @@ final class Control extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	private function getConfirmerControl(string $name) : Confirmer
+	private function getConfirmerControl(string $name): Confirmer
 	{
 		$confirmer = $this->getComponent('confirmer-' . $name);
 

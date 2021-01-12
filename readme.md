@@ -11,10 +11,10 @@ Extension for creating confirm action dialogs for various items for [Nette Frame
 
 ## Installation
 
-The best way to install ipub/confirmation-dialog is using  [Composer](http://getcomposer.org/):
+The best way to install ipub/confirmation-dialog is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require ipub/confirmation-dialog
+$ composer require urbitech/confirmation-dialog
 ```
 
 After that you have to register extension in config.neon.
@@ -28,5 +28,6 @@ extensions:
 
 Learn how to use smart confirmation dialogs in [documentation](https://github.com/iPublikuj/confirmation-dialog/blob/master/docs/en/index.md).
 
-***
+---
+
 Homepage [https://www.ipublikuj.eu](https://www.ipublikuj.eu) and repository [http://github.com/iPublikuj/confirmation-dialog](http://github.com/iPublikuj/confirmation-dialog).

@@ -7,7 +7,7 @@ This extension brings you special component for creating system confirmation dia
 The best way to install ipub/confirmation-dialog is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require ipub/confirmation-dialog
+$ composer require urbitech/confirmation-dialog
 ```
 
 After that you have to register extension in config.neon.
@@ -122,11 +122,13 @@ class SomePresenter
 And finally you have to add confirmer to the template.
 
 ```html
-{control confirmAction}
-
-{foreach $items as $item}
-    <a href="{link confirmAction:confirmConfirmerName! id => $item->id}">Do something with item {$item->title}</a>
-    <a href="{link confirmAction:confirmNextConfirmerName! id => $item->id}">Do something else with item {$item->title}</a>
+{control confirmAction} {foreach $items as $item}
+<a href="{link confirmAction:confirmConfirmerName! id => $item->id}"
+  >Do something with item {$item->title}</a
+>
+<a href="{link confirmAction:confirmNextConfirmerName! id => $item->id}"
+  >Do something else with item {$item->title}</a
+>
 {/foreach}
 ```
 

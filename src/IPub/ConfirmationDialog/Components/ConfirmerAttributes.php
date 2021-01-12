@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ConfirmerAttributes.php
  *
@@ -12,7 +13,7 @@
  * @date           31.03.14
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace IPub\ConfirmationDialog\Components;
 
@@ -85,8 +86,6 @@ abstract class ConfirmerAttributes extends BaseControl
 	{
 		list(, $parent, $name) = func_get_args() + [NULL, NULL, NULL];
 
-		parent::__construct($parent, $name);
-
 		// Get data storage for confirmer
 		$this->storage = $storage;
 	}
@@ -100,7 +99,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function setHeading($heading) : void
+	public function setHeading($heading): void
 	{
 		// Check variable type
 		if ($this->checkCallableOrString($heading)) {
@@ -116,7 +115,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidStateException
 	 */
-	public function getHeading() : ?string
+	public function getHeading(): ?string
 	{
 		return $this->getAttribute('heading');
 	}
@@ -130,7 +129,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function setQuestion($question) : void
+	public function setQuestion($question): void
 	{
 		// Check variable type
 		if ($this->checkCallableOrString($question)) {
@@ -144,7 +143,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidStateException
 	 */
-	public function getQuestion() : ?string
+	public function getQuestion(): ?string
 	{
 		$question = NULL;
 
@@ -155,7 +154,6 @@ abstract class ConfirmerAttributes extends BaseControl
 			if ($question !== NULL) {
 				$question = (string) $question;
 			}
-
 		} elseif ($this->question !== NULL) {
 			$question = (string) $this->question;
 		}
@@ -172,7 +170,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function setIcon($icon) : void
+	public function setIcon($icon): void
 	{
 		// Check variable type
 		if ($this->checkCallableOrString($icon)) {
@@ -186,7 +184,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidStateException
 	 */
-	public function getIcon() : ?string
+	public function getIcon(): ?string
 	{
 		return $this->getAttribute('icon');
 	}
@@ -198,7 +196,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @return void
 	 */
-	public function setHandler(callable $handler) : void
+	public function setHandler(callable $handler): void
 	{
 		// Update confirmation handler
 		$this->handler = $handler;
@@ -207,7 +205,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	/**
 	 * @return callable
 	 */
-	public function getHandler() : callable
+	public function getHandler(): callable
 	{
 		return $this->handler;
 	}
@@ -226,10 +224,8 @@ abstract class ConfirmerAttributes extends BaseControl
 
 		if ($callback instanceof \Closure) {
 			$result = call_user_func_array($callback, $params);
-
 		} elseif (method_exists($obj, 'tryCall')) {
 			$result = call_user_func_array([$obj, 'tryCall'], ['method' => $callback[1], 'params' => $params]);
-
 		} else {
 			$result = call_user_func_array([$obj, $callback[1]], $params);
 		}
@@ -244,7 +240,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	/**
 	 * @return void
 	 */
-	public function enableAjax() : void
+	public function enableAjax(): void
 	{
 		$this->useAjax = TRUE;
 	}
@@ -252,7 +248,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	/**
 	 * @return void
 	 */
-	public function disableAjax() : void
+	public function disableAjax(): void
 	{
 		$this->useAjax = FALSE;
 	}
@@ -260,7 +256,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	/**
 	 * @return Application\UI\Form
 	 */
-	protected function createComponentForm() : Application\UI\Form
+	protected function createComponentForm(): Application\UI\Form
 	{
 		// Create confirmation form
 		$form = new Application\UI\Form();
@@ -288,7 +284,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidStateException
 	 */
-	protected function getConfirmerValues(string $token) : array
+	protected function getConfirmerValues(string $token): array
 	{
 		// Get values stored in confirmer storage
 		$values = $this->storage->get($token);
@@ -308,7 +304,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	private function checkCallableOrString($var) : bool
+	private function checkCallableOrString($var): bool
 	{
 		if (!is_callable($var) && !is_string($var)) {
 			throw new Exceptions\InvalidArgumentException(sprintf('%s must be callback or string.', $var));
@@ -324,7 +320,7 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidStateException
 	 */
-	private function callCallableAttribute(callable $attribute) : string
+	private function callCallableAttribute(callable $attribute): string
 	{
 		if ($this['form']['secureToken']->value === NULL) {
 			throw new Exceptions\InvalidStateException('Token is not set!');
@@ -346,12 +342,11 @@ abstract class ConfirmerAttributes extends BaseControl
 	 *
 	 * @throws Exceptions\InvalidStateException
 	 */
-	private function getAttribute(string $attribute) : ?string
+	private function getAttribute(string $attribute): ?string
 	{
 		// Check if attribute is callable
 		if (is_callable($this->{$attribute})) {
 			return (string) $this->callCallableAttribute($this->{$attribute});
-
 		} elseif ($this->{$attribute}) {
 			return (string) $this->{$attribute};
 		}
