@@ -56,14 +56,13 @@ final class ConfirmationDialogExtension extends DI\CompilerExtension
 
 		$confirmerFactory = $builder->addFactoryDefinition($this->prefix('confirmer'))
 			->setImplement(Components\IConfirmer::class)
-			->setArguments([new Code\PhpLiteral('$templateFile')])
 			->setAutowired(FALSE)
 			->addTag(Nette\DI\Extensions\InjectExtension::TAG_INJECT);
 
 		// Define components factories
 		$dialogFactory = $builder->addFactoryDefinition($this->prefix('dialog'))
 			->setImplement(Components\IControl::class)
-			->setArguments([
+			->getResultDefinition()->setArguments([
 				new Code\PhpLiteral('$layoutFile'),
 				new Code\PhpLiteral('$templateFile'),
 				$confirmerFactory,
